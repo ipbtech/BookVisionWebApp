@@ -1,0 +1,27 @@
+﻿@page
+@model MyFirstWebApp.Views.EditModel
+
+
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>BookEdit</title>
+    </head>
+    <body>
+        <h1>Редактирование книги</h1>
+        <form name="editbookform" method="post">
+            <p><b>Название книги:</b><br>
+            <input type="text" name="title" value="@Model.EditableBook.Title" size="70">
+            <p><b>Автор книги:</b><br>
+            <input type="text" name="author" value="@Model.EditableBook.Author" size="70">
+            <p><b>Описание книги:</b><br>
+            <textarea name="description" value="@Model.EditableBook.Description" cols="65" rows="3"></textarea>
+            <p><b>Стоимость книги:</b><br>
+            <input type="text" name="price" value="@Model.EditableBook.Price" size="70"><br><br>
+            <input type="submit" value="Применить изменения" size="20"/>
+
+            <h3>@Model.ResultMessage</h3>
+            <h4>@Model.ErrorMessage</h4>
+        </form>
+    </body>
+</html>

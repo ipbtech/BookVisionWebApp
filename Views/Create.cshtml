@@ -1,0 +1,30 @@
+﻿@page
+@model MyFirstWebApp.Views.CreateModel;
+@using Microsoft.EntityFrameworkCore;
+@using MyFirstWebApp.DAL;
+@using MyFirstWebApp.Domain;
+@using MyFirstWebApp.Services;
+
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>BookCreate</title>
+    </head>
+    <body>
+        <h1>Добавление книги</h1>
+        <form name="createbookform" method="post">
+            <p><b>Название книги:</b><br>
+            <input type="text" name="title" size="70">
+            <p><b>Автор книги:</b><br>
+            <input type="text" name="author" size="70">
+            <p><b>Описание книги:</b><br>
+            <textarea name="description" cols="65" rows="3"></textarea>
+            <p><b>Стоимость книги:</b><br>
+            <input type="text" name="price" size="70"><br><br>
+            <input type="submit" value="Добавить" size="20"/>
+
+            <h3>@Model.ResultMessage</h3>
+            <h4>@Model.ErrorMessage</h4>
+        </form>
+    </body>
+</html>
