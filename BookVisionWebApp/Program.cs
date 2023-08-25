@@ -1,4 +1,6 @@
 using BookVisionWebApp.DAL;
+using BookVisionWebApp.Services;
+using BookVisionWebApp.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,6 +13,8 @@ builder.Services.AddDbContext<AppDbContext>(opt =>
 {
     opt.UseSqlServer(connectionString);
 });
+
+builder.Services.AddScoped<IBookService, BookService>();
 
 var app = builder.Build();
 

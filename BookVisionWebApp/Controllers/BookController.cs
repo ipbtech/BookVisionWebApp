@@ -1,4 +1,5 @@
-﻿using BookVisionWebApp.Services.Interfaces;
+﻿using BookVisionWebApp.Models;
+using BookVisionWebApp.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookVisionWebApp.Controllers
@@ -13,10 +14,26 @@ namespace BookVisionWebApp.Controllers
         }
 
         [HttpGet]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            
-            
+            var books = await _bookService.GetAllBooks();
+            return View(books);
+        }
+
+        [HttpGet]
+        public IActionResult CreateBook()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateBook(Book book)
+        {
+            if (ModelState.IsValid)
+            {
+                await _bookService.CreateBook(book);
+                return RedirectToAction("Index");
+            }           
             return View();
         }
     }

@@ -8,10 +8,10 @@ namespace BookVisionWebApp.DAL.Config
     {
         public void Configure(EntityTypeBuilder<Book> builder)
         {
-            builder.Property(x => x.Id).HasColumnName("book_id").ValueGeneratedOnAdd().IsRequired();
+            builder.Property(x => x.Id).HasColumnName("id").ValueGeneratedOnAdd().IsRequired();
             builder.Property(x => x.Author).HasColumnName("author").HasMaxLength(50).IsRequired();
-            builder.Property(x => x.Title).HasColumnName("titile").HasMaxLength(100).IsRequired();
-            builder.Property(x => x.Description).HasColumnName("description").HasMaxLength(500);
+            builder.Property(x => x.Title).HasColumnName("title").HasMaxLength(50).IsRequired();
+            builder.Property(x => x.Description).HasColumnName("description").HasMaxLength(200);
             builder.Property(x => x.Price).HasColumnName("price").IsRequired();
         }
     }

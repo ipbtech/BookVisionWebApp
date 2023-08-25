@@ -1,0 +1,49 @@
+﻿@model Book
+@{
+    ViewData["Title"] = "CreateBook";
+}
+
+<div class="text-center">
+    <h2 class="display-4">Новый программный продукт</h2>
+</div>
+<div class="text-center">
+    <h4 class="font-weight-bold text-danger">@ViewData["Error"]</h4>
+</div>
+<div class="container py-5">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="row justify-content-center">
+                <div class="mb-3">
+                    <form asp-controller="Book" asp-action="CreateBook">
+                        <div class="mb-3">
+                            <label asp-for="Title" class="form-label text-dark"></label>
+                            <input asp-for="Title" class="form-control text-dark text-start" type="text">
+                            <span asp-validation-for="Title" class="font-weight-bold text-danger text-center" />
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="Author" class="form-label text-dark"></label>
+                            <input asp-for="Author" class="form-control text-dark text-start" type="text">
+                            <span asp-validation-for="Author" class="font-weight-bold text-danger text-center" />
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="Price" class="form-label text-dark"></label>
+                            <input asp-for="Price" class="form-control text-dark text-start" type="text">
+                            <span asp-validation-for="Price" class="font-weight-bold text-danger text-center" />
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="Description" class="form-label text-dark"></label>
+                            <textarea asp-for="Description" class="form-control" type="text"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <button type="submit" class="btn btn-primary">Добавить книгу</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
