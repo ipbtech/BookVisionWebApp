@@ -13,7 +13,6 @@ namespace BookVisionWebApp.Controllers
             _bookService = bookService;
         }
 
-        [HttpGet]
         public async Task<IActionResult> Index()
         {
             var books = await _bookService.GetAllBooks();
@@ -35,6 +34,16 @@ namespace BookVisionWebApp.Controllers
                 return RedirectToAction("Index");
             }           
             return View();
+        }
+
+        public async Task<IActionResult> DeleteBook(int id)
+        {
+            Book book = await _bookService.GetBookById(id);
+            if (book != null)
+            {
+                await _bookService.DeleteBook(book);
+            }            
+            return RedirectToAction("Index");
         }
     }
 }

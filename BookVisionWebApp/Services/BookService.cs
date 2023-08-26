@@ -33,21 +33,13 @@ namespace BookVisionWebApp.Services
         }
         public async Task DeleteBook(Book book)
         {
-            var booksCollection = await _dbContext.Books.ToListAsync();
-            if (booksCollection.Contains(book, new BookEqualityComparer()))
-            {
-                _dbContext.Books.Remove(book);
-                await _dbContext.SaveChangesAsync();
-            }
+            _dbContext.Books.Remove(book);
+            await _dbContext.SaveChangesAsync();
         }
         public async Task EditBookById(Book book)
         {
-            var booksCollection = await _dbContext.Books.ToListAsync();
-            if (booksCollection.Contains(book, new BookEqualityComparer()))
-            {
-                _dbContext.Books.Update(book);
-                await _dbContext.SaveChangesAsync();
-            }
+            _dbContext.Books.Update(book);
+            await _dbContext.SaveChangesAsync();
         }
     }
 }
