@@ -30,8 +30,15 @@ namespace BookVisionWebApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                await _bookService.CreateBook(book);
-                return RedirectToAction("Index");
+                bool isCreated = await _bookService.CreateBook(book);
+                if (isCreated)
+                {
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    ViewData.Add("Error", "Такая книга уже есть в нашей базе");
+                }
             }           
             return View();
         }
@@ -44,6 +51,35 @@ namespace BookVisionWebApp.Controllers
                 await _bookService.DeleteBook(book);
             }            
             return RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> EditBook(int id)
+        {
+            Book book = await _bookService.GetBookById(id);
+            if (book != null)
+            {
+                return View(book);
+            }
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditBook(Book book)
+        {
+            if (ModelState.IsValid)
+            {
+                var isEditable = await _bookService.EditBook(book);
+                if (isEditable)
+                {
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    ViewData.Add("Error", "Такая книга уже есть в нашей базе");
+                }
+            }
+            return View(book);
         }
     }
 }

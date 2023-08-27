@@ -6,8 +6,8 @@ namespace BookVisionWebApp.Services.Interfaces
     {
         public Task<IEnumerable<Book>> GetAllBooks();
         public Task<Book> GetBookById(int id);
-        public Task CreateBook(Book book);
+        public Task<bool> CreateBook(Book book);
         public Task DeleteBook(Book book);
-        public Task EditBookById(Book book);
+        public Task<bool> EditBook(Book book);
     }
 }

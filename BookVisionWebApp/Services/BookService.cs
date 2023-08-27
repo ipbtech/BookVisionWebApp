@@ -22,24 +22,32 @@ namespace BookVisionWebApp.Services
         {
             return await _dbContext.Books.FirstOrDefaultAsync(x => x.Id == id);
         }
-        public async Task CreateBook(Book book)
+        public async Task<bool> CreateBook(Book book)
         {
             var booksCollection = await _dbContext.Books.ToListAsync();
             if (!booksCollection.Contains(book, new BookEqualityComparer()))
             {
                 await _dbContext.Books.AddAsync(book);
                 await _dbContext.SaveChangesAsync();
+                return true;
             }
+            return false;
         }
         public async Task DeleteBook(Book book)
         {
             _dbContext.Books.Remove(book);
             await _dbContext.SaveChangesAsync();
         }
-        public async Task EditBookById(Book book)
+        public async Task<bool> EditBook(Book book)
         {
-            _dbContext.Books.Update(book);
-            await _dbContext.SaveChangesAsync();
+            var booksCollection = await _dbContext.Books.ToListAsync();
+            if (!booksCollection.Contains(book, new BookEqualityComparer()))
+            {
+                _dbContext.Books.Update(book);
+                await _dbContext.SaveChangesAsync();
+                return true;
+            }
+            return false;
         }
     }
 }

@@ -24,7 +24,7 @@ namespace BookVisionWebApp.Models
         public double Price { get; set; }
 
         [DisplayName("Описание книги:")]
-        [MaxLength(200, ErrorMessage = "Описание книги должно быть не более 200 символов")]
+        [MaxLength(500, ErrorMessage = "Описание книги должно быть не более 500 символов")]
         public string? Description { get; set; }
     }
 
