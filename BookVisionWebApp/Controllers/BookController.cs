@@ -20,6 +20,17 @@ namespace BookVisionWebApp.Controllers
         }
 
         [HttpGet]
+        public async Task<IActionResult> GetBook(int id)
+        {
+            Book book = await _bookService.GetBookById(id);
+            if (book != null)
+            {
+                return View(book);
+            }
+            return RedirectToAction("Index");
+        }
+
+        [HttpGet]
         public IActionResult CreateBook()
         {
             return View();

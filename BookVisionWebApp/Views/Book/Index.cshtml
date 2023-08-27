@@ -24,7 +24,9 @@
             @foreach (var item in Model)
             {
                 <tr>
-                    <td>@item.Title</td>
+                    <td>
+                        <a asp-controller="Book" asp-action="GetBook" asp-route-id="@item.Id">@item.Title</a>
+                    </td>
                     <td>@item.Author</td>
                     <td>@string.Format("{0:C2}", item.Price)</td>
                     <td>
