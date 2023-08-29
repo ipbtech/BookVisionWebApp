@@ -41,9 +41,11 @@ namespace BookVisionWebApp.Controllers
         {
             if (ModelState.IsValid)
             {
+                book.PathToImageFile = MyHelper.GetPathToImageFile(book.ImageFile);
                 bool isCreated = await _bookService.CreateBook(book);
                 if (isCreated)
                 {
+                    await MyHelper.SendFileToServerAsync(book);                  
                     return RedirectToAction("Index");
                 }
                 else
@@ -91,6 +93,11 @@ namespace BookVisionWebApp.Controllers
                 }
             }
             return View(book);
+        }
+
+        public string GetPathToImageFile(IFormFile file)
+        {
+            return Path.Combine(Environment.CurrentDirectory, "wwwroot\\book_images", file.FileName);
         }
     }
 }

@@ -13,6 +13,8 @@ namespace BookVisionWebApp.DAL.Config
             builder.Property(x => x.Title).HasColumnName("title").HasMaxLength(50).IsRequired();
             builder.Property(x => x.Description).HasColumnName("description").HasMaxLength(500);
             builder.Property(x => x.Price).HasColumnName("price").IsRequired();
+            builder.Property(x => x.PathToImageFile).HasColumnName("pathimage").IsRequired();
+            builder.Ignore(x => x.ImageFile);
         }
     }
 }
