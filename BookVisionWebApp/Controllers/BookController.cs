@@ -25,6 +25,8 @@ namespace BookVisionWebApp.Controllers
             Book book = await _bookService.GetBookById(id);
             if (book != null)
             {
+                var pathToImage = MyHelper.GetPathToImageFileForRender(book.PathToImageFile);
+                ViewData.Add("ImageRenderPath", pathToImage);
                 return View(book);
             }
             return RedirectToAction("Index");
@@ -81,7 +83,7 @@ namespace BookVisionWebApp.Controllers
         public async Task<IActionResult> EditBook(Book book)
         {
             if (ModelState.IsValid)
-            {
+            {              
                 var isEditable = await _bookService.EditBook(book);
                 if (isEditable)
                 {
@@ -93,11 +95,6 @@ namespace BookVisionWebApp.Controllers
                 }
             }
             return View(book);
-        }
-
-        public string GetPathToImageFile(IFormFile file)
-        {
-            return Path.Combine(Environment.CurrentDirectory, "wwwroot\\book_images", file.FileName);
         }
     }
 }
