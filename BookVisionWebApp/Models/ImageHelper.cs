@@ -18,5 +18,10 @@
                 await book.ImageFile.CopyToAsync(fs);
             }
         }
+        public static void DeleteBookImageOnServer(Book book)
+        {
+            var path = book.PathToImageFile;
+            File.Delete(path);
+        }
     }
 }

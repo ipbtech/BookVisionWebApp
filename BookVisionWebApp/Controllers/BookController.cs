@@ -64,6 +64,7 @@ namespace BookVisionWebApp.Controllers
             Book book = await _bookService.GetBookById(id);
             if (book != null)
             {
+                ImageHelper.DeleteBookImageOnServer(book);
                 await _bookService.DeleteBook(book);
             }            
             return RedirectToAction("Index");
