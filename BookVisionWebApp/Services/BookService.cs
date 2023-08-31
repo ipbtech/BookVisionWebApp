@@ -40,14 +40,9 @@ namespace BookVisionWebApp.Services
         }
         public async Task<bool> EditBook(Book book)
         {
-            var booksCollection = await _dbContext.Books.ToListAsync();
-            if (!booksCollection.Contains(book, new BookEqualityComparer()))
-            {
-                _dbContext.Books.Update(book);
-                await _dbContext.SaveChangesAsync();
-                return true;
-            }
-            return false;
+            _dbContext.Books.Update(book);
+            await _dbContext.SaveChangesAsync();
+            return true;
         }
     }
 }
