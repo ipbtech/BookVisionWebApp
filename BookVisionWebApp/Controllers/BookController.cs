@@ -25,7 +25,7 @@ namespace BookVisionWebApp.Controllers
             Book book = await _bookService.GetBookById(id);
             if (book != null)
             {
-                var pathToImage = MyHelper.GetPathToImageFileForRender(book.PathToImageFile);
+                var pathToImage = ImageHelper.GetPathToImageFileForRender(book.PathToImageFile);
                 ViewData.Add("ImageRenderPath", pathToImage);
                 return View(book);
             }
@@ -43,11 +43,12 @@ namespace BookVisionWebApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                book.PathToImageFile = MyHelper.GetPathToImageFile(book.ImageFile);
+                book.PathToImageFile = ImageHelper.GetPathToImageFileForServer(book.ImageFile);
+                book.ImageFileName = book.ImageFile.FileName;
                 bool isCreated = await _bookService.CreateBook(book);
                 if (isCreated)
                 {
-                    await MyHelper.SendFileToServerAsync(book);                  
+                    await ImageHelper.SendImageFileToServerAsync(book);                  
                     return RedirectToAction("Index");
                 }
                 else
@@ -73,7 +74,9 @@ namespace BookVisionWebApp.Controllers
         {
             Book book = await _bookService.GetBookById(id);
             if (book != null)
-            {
+            {              
+                var pathToImage = ImageHelper.GetPathToImageFileForRender(book.PathToImageFile);
+                ViewData.Add("ImageRenderPath", pathToImage);
                 return View(book);
             }
             return RedirectToAction("Index");
@@ -92,6 +95,9 @@ namespace BookVisionWebApp.Controllers
                 else
                 {
                     ViewData.Add("Error", "Такая книга уже есть в нашей базе");
+
+                    var pathToImage = ImageHelper.GetPathToImageFileForRender(book.PathToImageFile);
+                    ViewData.Add("ImageRenderPath", pathToImage);
                 }
             }
             return View(book);

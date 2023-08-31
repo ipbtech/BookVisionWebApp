@@ -38,6 +38,7 @@
                         <div class="mb-3">
                             <label asp-for="Description" class="form-label text-dark"></label>
                             <textarea asp-for="Description" class="form-control" type="text"></textarea>
+                            <span asp-validation-for="Description" class="font-weight-bold text-danger text-center" />
                         </div>
                         <div class="mb-3">
                             <button type="submit" class="btn btn-primary">Добавить книгу</button>
@@ -52,5 +53,4 @@
 
 <script src="~/lib/jquery/dist/jquery.js"></script>
 <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
-<script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.19.1/additional-methods.min.js"></script>
 <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>

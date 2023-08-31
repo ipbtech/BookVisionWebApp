@@ -3,7 +3,7 @@
     ViewData["Title"] = "Изменение книги";
 }
 
-<div class="text-left">
+@*<div class="text-left">
     <h2 class="display-4">Изменение книги:</h2>
 </div>
 <div class="container py-5">
@@ -43,7 +43,56 @@
             </div>
         </div>
     </div>
+</div>*@
+
+<div class="container">
+    <div class="text-start">
+        <h2 class="display-4">Изменение книги:</h2>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="md-6">
+                <img src="@ViewData["ImageRenderPath"]" class="rounded" width="400" height="580" alt="image" />
+            </div>
+        </div>
+        <div class="col-md-6">
+            <form asp-controller="Book" asp-action="EditBook">
+                <div class="mb-3 text-center">
+                    <h4 class="font-weight-bold text-danger">@ViewData["Error"]</h4>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Title" class="form-label text-dark"></label>
+                    <input asp-for="Title" class="form-control text-dark text-start" value="@Model.Title" type="text">
+                    <span asp-validation-for="Title" class="font-weight-bold text-danger text-center" />
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Author" class="form-label text-dark"></label>
+                    <input asp-for="Author" class="form-control text-dark text-start" value="@Model.Author" type="text">
+                    <span asp-validation-for="Author" class="font-weight-bold text-danger text-center" />
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Price" class="form-label text-dark"></label>
+                    <input asp-for="Price" class="form-control text-dark text-start" value="@Model.Price" type="text">
+                    <span asp-validation-for="Price" class="font-weight-bold text-danger text-center" />
+                </div>
+                <div class="mb-3">
+                    <label class="form-label text-dark">Добавить/Заменить обложку книги (*.jpeg, *.png):</label>
+                    <input asp-for="ImageFile" class="form-control text-dark text-start" type="file" accept="image/jpeg,image/png">
+                    <span asp-validation-for="ImageFile" class="font-weight-bold text-danger text-center" />
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Description" class="form-label text-dark"></label>
+                    <textarea asp-for="Description" class="form-control" value="@Model.Description" type="text"></textarea>
+                </div>
+                <div class="mb-3">
+                    <button type="submit" class="btn btn-primary">Изменить</button>
+                    <a asp-controller="Book" asp-action="Index" class="btn btn-danger">Назад</a>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
+
 
 <script src="~/lib/jquery/dist/jquery.js"></script>
 <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
