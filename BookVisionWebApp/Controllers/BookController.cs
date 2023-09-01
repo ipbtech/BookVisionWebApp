@@ -59,6 +59,16 @@ namespace BookVisionWebApp.Controllers
             return View();
         }
 
+        //[HttpGet]
+        //public async Task<IActionResult> DeleteBook(int id)
+        //{
+        //    Book book = await _bookService.GetBookById(id);
+        //    if (book != null)
+        //    {
+        //        return PartialView("DeleteBook", book);
+        //    }
+        //    return RedirectToAction("Index");
+        //}
         public async Task<IActionResult> DeleteBook(int id)
         {
             Book book = await _bookService.GetBookById(id);
