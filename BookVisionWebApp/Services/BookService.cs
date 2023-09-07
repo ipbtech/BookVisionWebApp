@@ -14,35 +14,98 @@ namespace BookVisionWebApp.Services
             _dbContext = dbContext;
         }
         
-        public async Task<IEnumerable<Book>> GetAllBooks()
+        public async Task<BaseResponce<IEnumerable<Book>>> GetAllBooks()
         {
-            return await _dbContext.Books.ToListAsync();
+            var responce = new BaseResponce<IEnumerable<Book>>()
+            {
+                IsOkay = true,
+                Data = await _dbContext.Books.ToListAsync(),
+            };
+            return responce;
         }
-        public async Task<Book> GetBookById(int id)
+
+        public async Task<BaseResponce<Book>> GetBookById(int id)
         {
-            return await _dbContext.Books.FirstOrDefaultAsync(x => x.Id == id);
+            Book book = await _dbContext.Books.FirstOrDefaultAsync(x => x.Id == id);
+            if (book != null)
+            {
+                return new BaseResponce<Book>()
+                {
+                    IsOkay = true,
+                    Data = book,
+                };
+            }
+            else
+            {
+                return new BaseResponce<Book>()
+                {
+                    IsOkay = false,
+                    ErrorMessage = "Книга не найдена"
+                };
+            }
         }
-        public async Task<bool> CreateBook(Book book)
+
+        public async Task<BaseResponce<Book>> CreateBook(Book book)
         {
             var booksCollection = await _dbContext.Books.ToListAsync();
             if (!booksCollection.Contains(book, new BookEqualityComparer()))
             {
                 await _dbContext.Books.AddAsync(book);
                 await _dbContext.SaveChangesAsync();
-                return true;
+
+                return new BaseResponce<Book>()
+                {
+                    IsOkay = true,
+                    Data = book
+                };
             }
-            return false;
+            else
+            {
+                return new BaseResponce<Book>()
+                {
+                    IsOkay = false,
+                    ErrorMessage = "Такая книга уже существует в базе данных"
+                };
+            }
         }
+
         public async Task DeleteBook(Book book)
         {
             _dbContext.Books.Remove(book);
             await _dbContext.SaveChangesAsync();
         }
-        public async Task<bool> EditBook(Book book)
+
+        public async Task<BaseResponce<Book>> EditBook(Book newBook)
         {
-            _dbContext.Books.Update(book);
-            await _dbContext.SaveChangesAsync();
-            return true;
+            var booksCollection = await _dbContext.Books.ToListAsync();
+
+            var modifiedColl = new List<Book>();
+            booksCollection.ForEach(bk =>
+            {
+                if (bk.Title != newBook.Title && bk.Author != newBook.Author)
+                    modifiedColl.Add(bk);
+            });
+
+            //Book oldBook = await _dbContext.Books.FirstOrDefaultAsync(x => x.Id == newBook.Id);
+            if (!modifiedColl.Contains(newBook, new BookEqualityComparer()))
+            {
+                _dbContext.Books.Update(newBook);
+                await _dbContext.SaveChangesAsync();
+
+                return new BaseResponce<Book>()
+                {
+                    IsOkay = true,
+                    Data = newBook
+                };
+            }
+            else
+            {
+                return new BaseResponce<Book>()
+                {
+                    IsOkay = false,
+                    ErrorMessage = "Такая книга уже существует в базе данных"
+                };
+            }
         }
     }
 }

@@ -29,7 +29,6 @@ namespace BookVisionWebApp.Models
 
         [DisplayName("Загрузить обложку книги (*.jpeg, *.png):")]
         [DataType(DataType.Upload)]
-        //[Required(ErrorMessage = "Загрузите обложку книги. Так красивее")]
         public IFormFile? ImageFile { get; set; }
         public string? PathToImageFile { get; set; }
         public string? ImageFileName { get; set; }
