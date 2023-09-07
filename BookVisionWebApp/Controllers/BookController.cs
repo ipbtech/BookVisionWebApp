@@ -15,17 +15,19 @@ namespace BookVisionWebApp.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var books = await _bookService.GetAllBooks();
-            return View(books);
+            var responce = await _bookService.GetAllBooks();
+            return View(responce.Data);
         }
 
         [HttpGet]
         public async Task<IActionResult> GetBook(int id)
         {
-            Book book = await _bookService.GetBookById(id);
-            if (book != null)
+            var responce = await _bookService.GetBookById(id);
+            if (responce.IsOkay)
             {
-                return View(book);
+                var pathToImage = ImageHelper.GetPathToImageFileForRender(responce.Data.PathToImageFile);
+                ViewData.Add("ImageRenderPath", pathToImage);
+                return View(responce.Data);
             }
             return RedirectToAction("Index");
         }
@@ -41,14 +43,19 @@ namespace BookVisionWebApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                bool isCreated = await _bookService.CreateBook(book);
-                if (isCreated)
+                book.PathToImageFile = ImageHelper.GetPathToImageFileForServer(book.ImageFile);
+                if (!string.IsNullOrEmpty(book.PathToImageFile))
+                    book.ImageFileName = book.ImageFile.FileName;
+
+                var responce =  await _bookService.CreateBook(book);
+                if (responce.IsOkay)
                 {
+                    await ImageHelper.SendImageFileToServerAsync(book);                  
                     return RedirectToAction("Index");
                 }
                 else
                 {
-                    ViewData.Add("Error", "Такая книга уже есть в нашей базе");
+                    ViewData.Add("Error", responce.ErrorMessage);
                 }
             }           
             return View();
@@ -56,10 +63,11 @@ namespace BookVisionWebApp.Controllers
 
         public async Task<IActionResult> DeleteBook(int id)
         {
-            Book book = await _bookService.GetBookById(id);
-            if (book != null)
+            var responce = await _bookService.GetBookById(id);
+            if (responce.IsOkay)
             {
-                await _bookService.DeleteBook(book);
+                ImageHelper.DeleteBookImageOnServer(responce.Data);
+                await _bookService.DeleteBook(responce.Data);
             }            
             return RedirectToAction("Index");
         }
@@ -67,10 +75,12 @@ namespace BookVisionWebApp.Controllers
         [HttpGet]
         public async Task<IActionResult> EditBook(int id)
         {
-            Book book = await _bookService.GetBookById(id);
-            if (book != null)
-            {
-                return View(book);
+            var responce = await _bookService.GetBookById(id);
+            if (responce.IsOkay)
+            {              
+                var pathToImage = ImageHelper.GetPathToImageFileForRender(responce.Data.PathToImageFile);
+                ViewData.Add("ImageRenderPath", pathToImage);
+                return View(responce.Data);
             }
             return RedirectToAction("Index");
         }
@@ -79,15 +89,22 @@ namespace BookVisionWebApp.Controllers
         public async Task<IActionResult> EditBook(Book book)
         {
             if (ModelState.IsValid)
-            {
-                var isEditable = await _bookService.EditBook(book);
-                if (isEditable)
+            {              
+                var responce = await _bookService.EditBook(book);
+                if (responce.IsOkay)
                 {
                     return RedirectToAction("Index");
                 }
                 else
                 {
-                    ViewData.Add("Error", "Такая книга уже есть в нашей базе");
+                    ViewData.Add("Error", responce.ErrorMessage);
+
+                    responce = await _bookService.GetBookById(book.Id);
+                    if (responce.IsOkay)
+                    {
+                        var pathToImage = ImageHelper.GetPathToImageFileForRender(responce.Data.PathToImageFile);
+                        ViewData.Add("ImageRenderPath", pathToImage);
+                    }
                 }
             }
             return View(book);

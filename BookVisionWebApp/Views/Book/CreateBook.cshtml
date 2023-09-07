@@ -11,7 +11,7 @@
         <div class="col-md-12">
             <div class="row justify-content-center">
                 <div class="mb-3">
-                    <form asp-controller="Book" asp-action="CreateBook">
+                    <form asp-controller="Book" asp-action="CreateBook" enctype="multipart/form-data">
                         <div class="mb-3 text-center">
                             <h4 class="font-weight-bold text-danger">@ViewData["Error"]</h4>
                         </div>
@@ -31,8 +31,14 @@
                             <span asp-validation-for="Price" class="font-weight-bold text-danger text-center" />
                         </div>
                         <div class="mb-3">
+                            <label asp-for="ImageFile" class="form-label text-dark"></label>
+                            <input asp-for="ImageFile" class="form-control text-dark text-start" type="file" accept="image/jpeg,image/png">
+                            <span asp-validation-for="ImageFile" class="font-weight-bold text-danger text-center" />
+                        </div>
+                        <div class="mb-3">
                             <label asp-for="Description" class="form-label text-dark"></label>
                             <textarea asp-for="Description" class="form-control" type="text"></textarea>
+                            <span asp-validation-for="Description" class="font-weight-bold text-danger text-center" />
                         </div>
                         <div class="mb-3">
                             <button type="submit" class="btn btn-primary">Добавить книгу</button>
