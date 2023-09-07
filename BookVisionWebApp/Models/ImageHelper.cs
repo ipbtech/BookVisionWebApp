@@ -23,9 +23,10 @@
         {
             if (!string.IsNullOrEmpty(book.PathToImageFile))
             {
-                FileStream fs = new FileStream(book.PathToImageFile, FileMode.Create));
-                await book.ImageFile.CopyToAsync(fs);
-                fs.Close();
+                using (FileStream fs = new FileStream(book.PathToImageFile, FileMode.Create))
+                {
+                    await book.ImageFile.CopyToAsync(fs);
+                }
             }
         }
         public static void DeleteBookImageOnServer(Book book)

@@ -56,7 +56,7 @@
             </div>
         </div>
         <div class="col-md-6">
-            <form asp-controller="Book" asp-action="EditBook">
+            <form asp-controller="Book" asp-action="EditBook" enctype="multipart/form-data">
                 <div class="mb-3 text-center">
                     <h4 class="font-weight-bold text-danger">@ViewData["Error"]</h4>
                 </div>

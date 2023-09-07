@@ -24,7 +24,7 @@ namespace BookVisionWebApp.Services
             return responce;
         }
 
-        public async Task<BaseResponce<Book>> GetBookById(int id)
+        public async Task<BaseResponce<Book>> GetBookById(long id)
         {
             Book book = await _dbContext.Books.FirstOrDefaultAsync(x => x.Id == id);
             if (book != null)
@@ -82,20 +82,39 @@ namespace BookVisionWebApp.Services
             var modifiedColl = new List<Book>();
             booksCollection.ForEach(bk =>
             {
-                if (bk.Title != newBook.Title && bk.Author != newBook.Author)
+                if (bk.Id != newBook.Id)
                     modifiedColl.Add(bk);
             });
 
-            //Book oldBook = await _dbContext.Books.FirstOrDefaultAsync(x => x.Id == newBook.Id);
+            Book oldBook = await _dbContext.Books.FirstOrDefaultAsync(x => x.Id == newBook.Id);
             if (!modifiedColl.Contains(newBook, new BookEqualityComparer()))
             {
-                _dbContext.Books.Update(newBook);
+                if (newBook.ImageFile != null)
+                {
+                    if (oldBook.ImageFileName != newBook.ImageFile.FileName)
+                    {
+                        ImageHelper.DeleteBookImageOnServer(oldBook);
+
+                        newBook.PathToImageFile = ImageHelper.GetPathToImageFileForServer(newBook.ImageFile);
+                        oldBook.PathToImageFile = newBook.PathToImageFile;
+                        oldBook.ImageFileName = newBook.ImageFile.FileName;
+
+                        await ImageHelper.SendImageFileToServerAsync(newBook);
+                    }
+                }
+
+                oldBook.Author = newBook.Author;
+                oldBook.Title = newBook.Title;
+                oldBook.Price = newBook.Price;
+                oldBook.Description = newBook.Description;
+
+                _dbContext.Books.Update(oldBook);
                 await _dbContext.SaveChangesAsync();
 
                 return new BaseResponce<Book>()
                 {
                     IsOkay = true,
-                    Data = newBook
+                    Data = oldBook
                 };
             }
             else

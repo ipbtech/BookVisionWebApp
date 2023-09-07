@@ -99,10 +99,12 @@ namespace BookVisionWebApp.Controllers
                 {
                     ViewData.Add("Error", responce.ErrorMessage);
 
-                    
-                    
-                    var pathToImage = ImageHelper.GetPathToImageFileForRender(book.PathToImageFile);
-                    ViewData.Add("ImageRenderPath", pathToImage);
+                    responce = await _bookService.GetBookById(book.Id);
+                    if (responce.IsOkay)
+                    {
+                        var pathToImage = ImageHelper.GetPathToImageFileForRender(responce.Data.PathToImageFile);
+                        ViewData.Add("ImageRenderPath", pathToImage);
+                    }
                 }
             }
             return View(book);
